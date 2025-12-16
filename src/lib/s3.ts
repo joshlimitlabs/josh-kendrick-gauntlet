@@ -14,14 +14,14 @@ export async function uploadPdfToS3(file: Blob, fileName: string): Promise<strin
     throw new Error('Generated PDF is empty');
   }
 
-  // Convert Blob to Uint8Array
+  // convert blob to Uint8Array
   const arrayBuffer = await file.arrayBuffer();
   const uint8Array = new Uint8Array(arrayBuffer);
 
   const params = {
     Bucket: import.meta.env.VITE_S3_BUCKET,
     Key: `art-prints/${fileName}-${Date.now()}.pdf`,
-    Body: uint8Array, // Use Uint8Array instead of Blob
+    Body: uint8Array, // use Uint8Array instead of blob
     ContentType: 'application/pdf'
   };
 

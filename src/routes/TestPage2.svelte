@@ -29,6 +29,7 @@
   import roseGoldFoil from '$lib/assets/foil/rose_gold_metallic.png';
   import redFoil from '$lib/assets/foil/red_metallic.png';
   import blueFoil from '$lib/assets/foil/blue_metallic.png';
+  import fullWhite from '$lib/assets/foil/full_white.png';
   import fullHolo_Sparkle from '$lib/assets/holographics/full/sparkle.png';
   import fullHolo_Crystal from '$lib/assets/holographics/full/crystal.png';
   import fullHolo_Milkyway from '$lib/assets/holographics/full/milkyway.png';
@@ -87,8 +88,8 @@
   let imgY = $state(0);
   let isDragging = false;
   let activeCorner: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | null = null;
-  const margin = 16;
-  const cornerRadius = 28;
+  const margin = 30;
+  const cornerRadius = 36;
 
   let scaleRatio = $state(1); // 1 = 100% scale
   let windowAspectRatio = $state(1);
@@ -164,18 +165,21 @@
   let foilG = $state(0);
   let foilB = $state(0);
   let foilAlpha = $state(0); // alpha (0-1)
+  const UnderprintPrice = "$4.05";
+  const HoloPrice = "$4.05";
 
   // const FoilColors = ['Silver Metallic', 'Gold Metallic', 'Copper Metallic', 'Rose Gold Metallic', 'Red Metallic', 'Green Metallic', 'Blue Metallic', 'Dark Blue Metallic',
   //                     'Violet Metallic', 'Matte Silver Metallic', 'Satin Gold', 'Satin Red'];
   // const FoilColorsLimited = ['No Foil Underprint Layer', 'Rainbow Metallic', 'Silver Metallic', 'Gold Metallic'];
   // const HolographicList = ['No Holographic Pattern', 'Stardust', 'Ripple', 'Mosaic', 'Sparkle', 'Crystal', 'Glitter', 'Hyper Plaid', 'Milkyway', 'Star'];
   const FoilColors = ['Silver Metallic', 'Gold Metallic', 'Rose Gold Metallic', 'Red Metallic', 'Blue Metallic'];
-  const FoilColorsLimited = ['No Foil Underprint Layer', 'Rainbow Metallic', 'Silver Metallic', 'Gold Metallic'];
-  const HolographicList = ['No Holographic Pattern', 'Stardust', 'Ripple', 'Sparkle', 'Glitter', 'Stream of Light', 'Cracked Ice'];
+  const FoilColorsLimited = ['No Foil Underprint Layer', 'Rainbow Metallic (+' + UnderprintPrice + ')', 'Silver Metallic (+' + UnderprintPrice + ')', 'Gold Metallic (+' + UnderprintPrice + ')'];
+  const HolographicList = ['No Holographic Pattern', 'Stardust (+' + HoloPrice + ')', 'Ripple (+' + HoloPrice + ')', 'Sparkle (+' + HoloPrice + ')',
+                           'Glitter (+' + HoloPrice + ')', 'Stream of Light (+' + HoloPrice + ')', 'Cracked Ice (+' + HoloPrice + ')'];
   // let colorHex = $state("#646464FF");
   let colorHexUnder = $state("#646464FF");
   let selectedFoilColor: string = $state(FoilColors[0]);
-  let selectedUnderprint: string = $state(FoilColorsLimited[0]);
+  let selectedUnderprint: string = $state('');
   let selectedHoloPattern: string = $state(HolographicList[0]);
   let selectedHoloImg: string = $state(holo_Stardust);
   let fullFoilEnabled = $state(false);
@@ -213,11 +217,15 @@
   let underprintImg = new Image();
   let foilColorImg = new Image();
   let plexiMessage = $state(false);
-
+  
   let underprintAlpha = $state(0);
+  let holoAlpha = $state(1);
+  let imgAlpha = $state(1);
   
 	import LegalDisclaimer from "./LegalDisclaimer.svelte";
   let acceptTermsCheck = $state(false);
+
+  let whitePixelDetected = $state(false);
 
   $effect(() => {
 
@@ -599,7 +607,12 @@
     imageCtx.save();
 
     if (!exporting)
+    {
       imageCtx.scale(contentScale, contentScale);
+      imageCtx.globalAlpha = imgAlpha;
+    }
+    else
+      imageCtx.globalAlpha = 1;
 
     const scaledImgWidth = imgWidth;
     const scaledImgHeight = imgWidth / imgAspectRatio;
@@ -639,9 +652,10 @@
         imageCtx.translate(centerX, centerY);
         imageCtx.rotate(rotation);
         imageCtx.translate(-centerX, -centerY);
+        imageCtx.globalAlpha = 1;
         
         // draw rotated dotted border
-        imageCtx.strokeStyle = '#FFFFFF';
+        imageCtx.strokeStyle = '#AAAAAA';
         imageCtx.lineWidth = 4;
         imageCtx.setLineDash([12, 12]);
         imageCtx.strokeRect(
@@ -654,6 +668,7 @@
         
         // restore before drawing UI elements that shouldn't rotate
         imageCtx.restore();
+        imageCtx.globalAlpha = 1;
         
         // calculate rotation handle position
         const rotationHandleX = centerX + Math.sin(rotation) * (borderedHeight/2 + scaledRotationHandleLength);
@@ -666,7 +681,7 @@
             centerY - Math.cos(rotation) * borderedHeight/2
         );
         imageCtx.lineTo(rotationHandleX, rotationHandleY);
-        imageCtx.strokeStyle = '#FFFFFF';
+        imageCtx.strokeStyle = '#AAAAAA';
         imageCtx.lineWidth = 1;
         imageCtx.stroke();
         
@@ -844,14 +859,10 @@
     
     underCtx.save();
 
-    if (selectedUnderprint != FoilColorsLimited[0])
+    if (selectedUnderprint != '')
     {
-      // if (selectedUnderprint == "Rainbow Metallic")
-        underCtx.globalAlpha = underprintAlpha;
-        underCtx.drawImage(underprintImg, 0, 0, underCanvas.width, underCanvas.height);
-      // else
-      //   fillCanvas();
-
+      underCtx.globalAlpha = underprintAlpha;
+      underCtx.drawImage(underprintImg, 0, 0, underCanvas.width, underCanvas.height);
       underCtx.scale(contentScale, contentScale);
       underCtx.save();
 
@@ -877,6 +888,7 @@
 
     if (selectedHoloPattern != HolographicList[0])
     {
+      holoCtx.globalAlpha = holoAlpha;
       holoCtx.drawImage(FullHoloImg, 0, 0, holoCanvas.width, holoCanvas.height);
       holoCtx.scale(contentScale, contentScale);
       holoCtx.save();
@@ -1709,20 +1721,19 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
     URL.revokeObjectURL(url);
   }
 
-  function handleImageUpload(e: Event) {
-		const target = e.target as HTMLInputElement;
-    imageFileName = target.files?.[0]?.name || imageFileName;
+  async function handleImageUpload(e: Event) {
+    const target = e.target as HTMLInputElement;
+    if (!target.files?.[0]) return;
     
-		if (target.files && target.files[0]) {
-		imageFile = target.files[0];
-		const reader = new FileReader();
+    imageFileName = target.files[0].name;
+    imageFile = target.files[0];
+    const reader = new FileReader();
 
-		reader.onload = (e) => {
-			img = new Image();
-			img.src = e.target?.result as string;
+    reader.onload = (e) => {
+      img = new Image();
+      img.src = e.target?.result as string;
 
-			// once the image is loaded, draw it on the canvas
-			img.onload = () => {
+      img.onload = () => {
         imageUploaded = true;
         visibleLayers[1] = true;
         activeWindow = 2;
@@ -1731,16 +1742,62 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
         imgAspectRatio = img.naturalWidth / img.naturalHeight;
         initialWidth = img.naturalWidth;
         initialHeight = img.naturalHeight;
-        imgWidth = initialWidth * scaleRatio; // apply initial scale
+        imgWidth = initialWidth * scaleRatio;
         imgX = Math.round(boxCoords[0]);
         imgY = Math.round(boxCoords[1]);
-				canvasRedraw();
-			};
-		};
+        imageProcess();
+        
+        // force a reactive update
+        $state.snapshot(img); // trigger svelte reactivity
+        requestAnimationFrame(() => {
+          canvasRedraw();
+        });
+      };
+    };
 
-		reader.readAsDataURL(imageFile);
-		}
-	}
+    reader.readAsDataURL(imageFile);
+  }
+
+  async function imageProcess() {
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+    const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true });
+
+    if (!tempCtx) return;
+
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    tempCtx.drawImage(img, 0, 0);
+
+    const imageData = tempCtx.getImageData(0, 0, img.width, img.height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      // check if the pixel is solid white (#FFFFFF)
+      if (r === 255 && g === 255 && b === 255)
+      {
+        data[i + 3] = 0; // alpha (0-255)
+        whitePixelDetected = true;
+      }
+      
+    }
+    
+    tempCtx.putImageData(imageData, 0, 0);
+
+    await new Promise<void>((resolve) => {
+      const dataURL = tempCanvas.toDataURL();
+      img = new Image();
+      img.src = dataURL;
+      img.onload = () => {
+        tick();
+        resolve();
+      };
+    });
+  }
 
   async function exportLayout() {
     isExporting = true;
@@ -2359,30 +2416,22 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
 
   async function handleUnderprintChange() {
     changingColor = true;
-    // let underRGBA = [0, 0, 0, 0];
+    imgAlpha = 1;
 
-    // switch (selectedUnderprint)
-    // {
-    //   case 'Silver Metallic':       underRGBA = [100, 100, 100, selectedDevice == "Glyph" ? 0.5 : 0.4];  break;
-    //   case 'Gold Metallic':         underRGBA = [230, 200, 0, selectedDevice == "Glyph" ? 0.35 : 0.25];    break;
-    //   case 'Rainbow Metallic':      underRGBA = [220, 170, 170, selectedDevice == "Glyph" ? 0.5 : 0.3];  break;
-    // }
-
-    // colorHexUnder = rgbaToHex(underRGBA[0], underRGBA[1], underRGBA[2], underRGBA[3]);
-
-    switch (selectedUnderprint)
+    if (selectedUnderprint.includes('No Foil Underprint Layer'))
     {
-      case 'Silver Metallic':       underprintAlpha = selectedDevice == "Glyph" ? 0.5 : 0.25;  break;
-      case 'Gold Metallic':         underprintAlpha = selectedDevice == "Glyph" ? 0.45 : 0.225;    break;
-      case 'Rainbow Metallic':     
-        underprintAlpha = selectedDevice == "Glyph" ? 0.4 : 0.2; 
-        if (selectedHoloPattern != HolographicList[0])
-          underprintAlpha -= 0.05; 
-      break;
+      underprintAlpha = 1;
+      underprintImg.src = fullWhite;
+      await new Promise<void>((resolve) => {
+        underprintImg.onload = () => {
+          resolve();
+        };
+      });
     }
-
-    if (selectedUnderprint == "Silver Metallic")
+    else if (selectedUnderprint.includes('Silver Metallic'))
     {
+      underprintAlpha = selectedDevice == "Glyph" ? 0.85 : 0.7;
+      imgAlpha = selectedDevice == "Glyph" ? 0.85 : 0.7;
       underprintImg.src = silverFoil;
       await new Promise<void>((resolve) => {
         underprintImg.onload = () => {
@@ -2390,8 +2439,10 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
         };
       });
     }
-    if (selectedUnderprint == "Gold Metallic")
+    else if (selectedUnderprint.includes('Gold Metallic'))
     {
+      underprintAlpha = selectedDevice == "Glyph" ? 0.85 : 0.7;
+      imgAlpha = selectedDevice == "Glyph" ? 0.85 : 0.7;
       underprintImg.src = goldFoil;
       await new Promise<void>((resolve) => {
         underprintImg.onload = () => {
@@ -2399,8 +2450,12 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
         };
       });
     }
-    if (selectedUnderprint == "Rainbow Metallic")
+    else if (selectedUnderprint.includes('Rainbow Metallic'))
     {
+      underprintAlpha = selectedDevice == "Glyph" ? 0.7 : 0.35; 
+      imgAlpha = selectedDevice == "Glyph" ? 0.85 : 0.7;
+      if (selectedHoloPattern != HolographicList[0])
+        underprintAlpha -= 0.05;
       underprintImg.src = rainbowFoil;
       await new Promise<void>((resolve) => {
         underprintImg.onload = () => {
@@ -2408,32 +2463,63 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
         };
       });
     }
-
-    if (underCtx && selectedUnderprint != FoilColorsLimited[0])
-      underCtx.globalAlpha = underprintAlpha;
     
     canvasRedraw();
     changingColor = false;
   }
 
   async function handleHoloChange() {
-    if (selectedUnderprint == "Rainbow Metallic")
+    if (selectedUnderprint.includes('Rainbow Metallic'))
       handleUnderprintChange();
 
-    switch (selectedHoloPattern)
-    {
-      case 'Stardust':        selectedHoloImg = holo_Stardust;          FullHoloImg.src = fullHolo_Stardust;      break;
-      case 'Ripple':          selectedHoloImg = holo_Ripple;            FullHoloImg.src = fullHolo_Ripple;        break;
-      case 'Mosaic':          selectedHoloImg = holo_Mosaic;            FullHoloImg.src = fullHolo_Mosaic;        break;
-      case 'Sparkle':         selectedHoloImg = holo_Sparkle;           FullHoloImg.src = fullHolo_Sparkle;       break;
-      case 'Crystal':         selectedHoloImg = holo_Crystal;           FullHoloImg.src = fullHolo_Crystal;       break;
-      case 'Glitter':         selectedHoloImg = holo_Glitter;           FullHoloImg.src = fullHolo_Glitter;       break;
-      case 'Hyper Plaid':     selectedHoloImg = holo_HyperPlaid;        FullHoloImg.src = fullHolo_Hyperplaid;    break;
-      case 'Milkyway':        selectedHoloImg = holo_Milkyway;          FullHoloImg.src = fullHolo_Milkyway;      break;
-      case 'Star':            selectedHoloImg = holo_Star;              FullHoloImg.src = fullHolo_Star;          break;
-      case 'Stream of Light': selectedHoloImg = holo_Stardust;          FullHoloImg.src = fullHolo_Streamoflight; break; //replace holo img
-      case 'Cracked Ice':     selectedHoloImg = holo_Stardust;          FullHoloImg.src = fullHolo_CrackedIce;    break; //replace holo img
+    if (selectedHoloPattern.includes('Stardust')) {
+      selectedHoloImg = holo_Stardust;
+      FullHoloImg.src = fullHolo_Stardust;
+      holoAlpha = 0.9;
+    } else if (selectedHoloPattern.includes('Ripple')) {
+      selectedHoloImg = holo_Ripple;
+      FullHoloImg.src = fullHolo_Ripple;
+      holoAlpha = 0.7;
+    } else if (selectedHoloPattern.includes('Mosaic')) {
+      selectedHoloImg = holo_Mosaic;
+      FullHoloImg.src = fullHolo_Mosaic;
+      holoAlpha = 0;
+    } else if (selectedHoloPattern.includes('Sparkle')) {
+      selectedHoloImg = holo_Sparkle;
+      FullHoloImg.src = fullHolo_Sparkle;
+      holoAlpha = 0.8;
+    } else if (selectedHoloPattern.includes('Crystal')) {
+      selectedHoloImg = holo_Crystal;
+      FullHoloImg.src = fullHolo_Crystal;
+      holoAlpha = 0;
+    } else if (selectedHoloPattern.includes('Glitter')) {
+      selectedHoloImg = holo_Glitter;
+      FullHoloImg.src = fullHolo_Glitter;
+      holoAlpha = 0.8;
+    } else if (selectedHoloPattern.includes('Hyper Plaid')) {
+      selectedHoloImg = holo_HyperPlaid;
+      FullHoloImg.src = fullHolo_Hyperplaid;
+      holoAlpha = 0;
+    } else if (selectedHoloPattern.includes('Milkyway')) {
+      selectedHoloImg = holo_Milkyway;
+      FullHoloImg.src = fullHolo_Milkyway;
+      holoAlpha = 0;
+    } else if (selectedHoloPattern.includes('Star')) {
+      selectedHoloImg = holo_Star;
+      FullHoloImg.src = fullHolo_Star;
+      holoAlpha = 0;
+    } else if (selectedHoloPattern.includes('Stream of Light')) {
+      selectedHoloImg = holo_Stardust;
+      FullHoloImg.src = fullHolo_Streamoflight;
+      holoAlpha = 0.9;
+    } else if (selectedHoloPattern.includes('Cracked Ice')) {
+      selectedHoloImg = holo_Stardust;
+      FullHoloImg.src = fullHolo_CrackedIce;
+      holoAlpha = 0.9;
     }
+
+    if (selectedDevice == "Glyph")
+      holoAlpha = (holoAlpha + 1)*0.5;
 
     if (selectedHoloPattern != HolographicList[0])
     {
@@ -2547,18 +2633,6 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
         variantID = import.meta.env.VITE_SHOPIFY_VARIANT_ID7;
       else if ( foilUploaded && selectedHoloPattern != HolographicList[0] && selectedUnderprint != FoilColorsLimited[0] )
         variantID = import.meta.env.VITE_SHOPIFY_VARIANT_ID8;
-      
-      // // create Shopify order with additional metadata
-      // const result = await createShopifyOrder(
-      //   pdfUrl,
-      //   'gid://shopify/ProductVariant/' + variantID,
-      //   {
-      //     // additional metadata for flow
-      //     printable_full_foil_layer: (selectedUnderprint == FoilColorsLimited[0] ? `none` : selectedUnderprint),
-      //     non_printable_spot_foil_layer: (foilUploaded ? selectedFoilColor :  `none` ),
-      //     holographic_pattern: (selectedHoloPattern == HolographicList[0] ? `none` : selectedHoloPattern)
-      //   }
-      // );
 
       const customAttributes = [
         { key: "pdf_url", value: pdfUrl },
@@ -2915,6 +2989,40 @@ function handleMouseMove(e: MouseEvent | TouchEvent) {
 
         <button onclick={() => (foilTutorialWindow = false)} class="close-button" style="display: flex; margin-top: 28px; position: sticky; align-self: center;">
           Done
+        </button>
+      </div>
+      
+    </div>
+  </div>
+{:else if whitePixelDetected}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div transition:fade="{{ duration: 100 }}" class="warning-overlay"
+  onclick={() => (whitePixelDetected = helpWindowHover ? whitePixelDetected : false)}>
+    <div class="warning-box"
+    onmouseenter={() => (helpWindowHover = true)}
+    onmouseleave={() => (helpWindowHover = false)}
+    style="width: fit-content;
+    white-space: nowrap;
+    max-height: 95%;
+    overflow-x: auto;
+    overflow-y: auto;">
+      <h1 style="margin-top: -8px; font-size: 1.8rem; font-weight: 600; color: #e8e6e3; margin-bottom: 1.0rem; text-align: left;">White Pixels Detected</h1>
+      <p style="font-size: 1rem; color: #b9bec5; margin-bottom: 8px; line-height: 1.5; text-align: left;">
+        TBD explanation on white pixels being transparent
+      </p>
+
+      <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 1rem; max-width: 100%; margin-top: 24px;">
+          <!-- svelte-ignore a11y_img_redundant_alt -->
+          <img src={foiltutorial1} alt="Foil tutorial image before" style="border: 2px solid #3498db;" />
+          <p style="font-size: 2rem;">➡️</p>
+          <!-- svelte-ignore a11y_img_redundant_alt -->
+          <img src={foiltutorial2} alt="Foil tutorial image after" style="border: 2px solid #3498db;" />
+        </div>
+
+        <button onclick={() => (whitePixelDetected = false)} class="close-button" style="display: flex; margin-top: 28px; position: sticky; align-self: center;">
+          Okay
         </button>
       </div>
       
@@ -3505,7 +3613,7 @@ style:top={tabPosition}px>
         
         <div class="right-items">
 
-        {#if foilUploaded || selectedUnderprint !== FoilColorsLimited[0] || selectedHoloPattern !== HolographicList[0]}
+        {#if foilUploaded || selectedUnderprint || selectedHoloPattern !== HolographicList[0]}
 
           <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
           <img src={visibleLayers[2] ? eye_1 : eye_0} alt="Visible?" class="layer-icon" style="margin-right: 6px;"
@@ -3525,9 +3633,12 @@ style:top={tabPosition}px>
 
           <div class="left-items">
 
-            <h2 style="font-weight: bold;">Full Foil Underprint Layer</h2>
-            <h2 style="color: #ff6666;">+$4.05</h2>
-            <!-- PRICE -->
+            <h2 style="font-weight: bold;">Full Foil Underprint Layer
+            <span style:color=#ff6666 style:font-size=20px style:margin-left=2px>{ !selectedUnderprint ? "*" : "" }</span>
+            </h2>
+            {#if selectedUnderprint && selectedUnderprint !== FoilColorsLimited[0]}
+              <h2 style="color: #ff6666;">+{UnderprintPrice}</h2>
+            {/if}
 
           </div>
 
@@ -3546,6 +3657,7 @@ style:top={tabPosition}px>
         <select style="margin-left: -4px;"
         bind:value={selectedUnderprint}
         onchange={handleUnderprintChange}>
+        <option value="" disabled selected>Select an underprint</option>
           {#each FoilColorsLimited as color}
             <option value={color}>{color}</option>
           {/each}
@@ -3958,8 +4070,9 @@ style:top={tabPosition}px>
           <div class="left-items">
 
             <h2 style="font-weight: bold;">Holographic Overprint</h2>
-            <h2 style="color: #ff6666;">+$4.05</h2>
-            <!-- PRICE -->
+            {#if selectedHoloPattern && selectedHoloPattern !== HolographicList[0]}
+              <h2 style="color: #ff6666;">+{HoloPrice}</h2>
+            {/if}
 
           </div>
 
@@ -4177,10 +4290,9 @@ style:top={tabPosition}px>
               if (activeTab)
                 toggleTab(activeTab);
             }}
-    disabled={!imageUploaded || !deviceCovered || selectedDevice === "" }>
+    disabled={!imageUploaded || !selectedUnderprint || selectedDevice === "" }>
       Purchase Print
     </button>
-    
   </div>
 </div>
 
@@ -4247,9 +4359,9 @@ style="width={canvasWidth}px; height={canvasHeight}px; place-items: center;
     position: absolute;
   }
 
-  .imageLayer { z-index: 1;
+  .underLayer { z-index: 1; 
   background-color: #0a0f18; }
-  .underLayer { z-index: 2; }
+  .imageLayer { z-index: 2; }
   .foilLayer { z-index: 3; }
   .holoLayer { z-index: 4; }
   .rectangleLayer { z-index: 5; }

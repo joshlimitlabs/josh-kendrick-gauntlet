@@ -11,31 +11,29 @@ export var Tooltips: {
     cx: number,
     cy: number,
     message: string }[] = [
-    { name: "imagedescription", cx: 210, cy: 5, message: "Valid image file types include .jpg/.jpeg, .png, .gif, .webp, .svg, .bmp, and .tif/.tiff." },
-    { name: "imagescale", cx: 320, cy: 42, message: "Increasing the image scale will cause image blurring. Increase the size of your image prior to uploading to preserve image resolution." },
-    { name: "imagesmoothing", cx: 322, cy: 18, message: "Enabling image smoothing will blur the image if the scale is increased. Disabling smoothing will make the image look more pixelated by comparison." },
-    { name: "foildescription", cx: 180, cy: 5, message: "Uploaded foil masks must be fully black pixels on areas that will have foil. All other pixel colors will not have foil included." },
-    { name: "foillocation", cx: 336, cy: 16, message: "TBD explanation between above and below foil" },
-    { name: "removefoil", cx: 112, cy: -50, message: "Remove foil text (TBD)" },
-    { name: "exportbuttons", cx: 4, cy: 34, message: "Export buttons text (TBD)" },
-    // { name: "exportlayout", cx: 8, cy: 44, message: "Export layout text (TBD)" },
-    // { name: "exporttopdf", cx: 0, cy: 0, message: "Export to PDF text (TBD)" },
-    { name: "buttontoggle", cx: 1164, cy: 42, message: "Button toggle text (TBD)" },
-    { name: "leftthumb", cx: 580, cy: 42, message: "Left thumb button text (TBD)" },
-    { name: "rightthumb", cx: 867, cy: 52, message: "Right thumb button text (TBD)" },
-    { name: "resetimagescale", cx: 60, cy: -2, message: "Reset image scale text (TBD)" },
-    { name: "matchfoilscale", cx: 146, cy: -2, message: "Match foil scale text (TBD)" },
-    { name: "resetimagerotation", cx: 60, cy: -2, message: "Reset image rotation text (TBD)" },
-    { name: "matchfoilrotation", cx: 146, cy: -2, message: "Match foil rotation text (TBD)" },
-    { name: "resetimageposition", cx: 60, cy: -2, message: "Reset image position text (TBD)" },
-    { name: "matchfoilposition", cx: 146, cy: -2, message: "Match foil position text (TBD)" },
-    { name: "resetfoilscale", cx: 60, cy: -2, message: "Reset foil scale text (TBD)" },
-    { name: "matchimagescale", cx: 164, cy: -2, message: "Match image scale text (TBD)" },
-    { name: "resetfoilrotation", cx: 60, cy: -2, message: "Reset foil rotation text (TBD)" },
-    { name: "matchimagerotation", cx: 164, cy: -2, message: "Match image rotation text (TBD)" },
-    { name: "resetfoilposition", cx: 60, cy: -2, message: "Reset foil position text (TBD)" },
-    { name: "matchimageposition", cx: 164, cy: -2, message: "Match image position text (TBD)" },
-    { name: "imagebestfit", cx: 246, cy: -32, message: "Image best fit text (TBD)" },
+    { name: "layoutsettings", cx: 0, cy: 0, message: "Please make sure your artwork extends all the way to the red bleed line. Button holes with artwork will be cut out and included in your item." },
+    { name: "imagedescription", cx: 0, cy: 0, message: "Artwork will be printed in CMYK format, not RGB. The printer does not apply ink to fully white pixels, allowing the white print sheet or the foil underprint layer to show through. Valid image file types include .jpg / .jpeg, .png, .gif, .webp, .svg, .bmp, and .tif / .tiff." },
+    { name: "imagescale", cx: 0, cy: 0, message: "Increasing the image scale will cause image blurring. Increase the size of your image prior to uploading to preserve image resolution." },
+    { name: "imagesmoothing", cx: 0, cy: 0, message: "Enabling image smoothing will blur the image if the scale is increased. Disabling smoothing will make the image look more pixelated by comparison." },
+    { name: "foildescription", cx: 0, cy: 0, message: "For an additional charge, your art plate can include up to two customizable foil layers as well as a holographic pattern overlayed onto the print." },
+    { name: "resetimagescale", cx: 0, cy: 0, message: "Reset the image scale to 1.0" },
+    { name: "matchfoilscale", cx: 0, cy: 0, message: "Match the scale of the spot foil" },
+    { name: "resetimagerotation", cx: 0, cy: 0, message: "Reset the image rotation to 0°" },
+    { name: "matchfoilrotation", cx: 0, cy: 0, message: "Match the rotation of the spot foil" },
+    { name: "resetimageposition", cx: 0, cy: 0, message: "Reset the image position to 0" },
+    { name: "matchfoilposition", cx: 0, cy: 0, message: "Match the position of the spot foil" },
+    { name: "resetfoilscale", cx: 0, cy: 0, message: "Reset the spot foil scale to 1.0" },
+    { name: "matchimagescale", cx: 0, cy: 0, message: "Match the scale of the image" },
+    { name: "resetfoilrotation", cx: 0, cy: 0, message: "Reset the spot foil rotation to 0°" },
+    { name: "matchimagerotation", cx: 0, cy: 0, message: "Match the rotation of the image" },
+    { name: "resetfoilposition", cx: 0, cy: 0, message: "Reset the spot foil position to 0" },
+    { name: "matchimageposition", cx: 0, cy: 0, message: "Match the position of the image" },
+    { name: "imagebestfit", cx: 0, cy: 0, message: "Automatically resize and center your image to have it best fit within the required margins of your selected device" }, //
+    { name: "purchaseprint", cx: 0, cy: 0, message: "When you are done customizing your art, click here to generate your own Shopify link for purchase." }, //
+    { name: "exportlayout", cx: 0, cy: 0, message: "Export your device layout as a full-sized PNG image for external reference purposes" }, //
+    { name: "underprintlayer", cx: 0, cy: 0, message: "Select a full metallic underprint layer for your artwork. Choose between a Silver or Gold backdrop, or select a Rainbow metallic shine to give your art a fully holographic appearance." }, //
+    { name: "spotfoillayer", cx: 0, cy: 0, message: "Upload a black-and-white spot foil mask file to include a custom metallic design on your art. This will be printed OVER your artwork and will cover any areas of the printed image beneath it!" }, //
+    { name: "holographiclayer", cx: 0, cy: 0, message: "Choose from available holographic patterns that will show iridescent shining shapes on your art. The graphic preview will show a to-scale approximation of the selected pattern." },
 ];
 
 export interface Circle {
@@ -46,12 +44,6 @@ export interface Circle {
     enabled: boolean,
     former: boolean,
 }
-
-const yScale = 1.93;
-const yShift = -2;
-
-const xScale = 3.58;
-const xShift = -2;
 
 export var Circles = writable<Circle[]>([
     { name: "LF1", cx: 103.346, cy: 61.855, r: mediumSize, enabled: true, former: true  },

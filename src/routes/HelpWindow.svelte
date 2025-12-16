@@ -53,25 +53,25 @@
 
 <div class="text-header">
   {#if currentIndex === 0}
-    <h2>Selecting a Layout</h2>
-    <p>Start by opening the Layout tab and selecting the device you'd like to make a custom art plate for.</p>
-    <p>If you're using a Glyph, then you can select from a pre-made layout, or use the Button Toggle to create your very own custom layout.</p>
+    <h2>Selecting a Product</h2>
+    <p>Start by opening the Product + Layout tab and selecting the device you'd like to create custom art for.</p>
+    <p>If you're making art for a Glyph you can choose to select from a pre-made layout, or use the Button Toggle to create your very own custom layout.</p>
     <p>If you're using a different device, select the name of the device's associated company and select the specific product name from the dropdown.</p>
   {:else if currentIndex === 1}
     <h2>Adding an Image</h2>
-    <p>Open the Image tab and upload an image with the "Select image file" button.</p>
-    <p>Then you may drag and drop the image to move it, as well as scale and rotate it using the transform dots around the image or the numeric scales in the expanded tab.</p>
+    <p>Open the CMYK Image tab and upload an image with the "Select image file" button.</p>
+    <p>You can drag and drop the image to move it, as well as scale and rotate it using the transform dots around the image or the numeric scales in the expanded tab.</p>
     <p>You may also use the alignment buttons to help orient the image, or use the "Best Fit" button to automatically size and center your image.</p>
   {:else if currentIndex === 2}
-    <h2>Adding Foil</h2>
-    <p>Open the Foil tab and either select to either have a full holographic print, a full foil print, or upload a custom spot-foil pattern with the "Select foil file" button.</p>
-    <p>Select a foil color and a foil print layer (if applicable) from the dropdowns.</p>
-    <p>The foil can be transformed in the same ways as the image, or you can click the "Match Image" buttons to have your foil transformations be the same as your image.</p>
+    <h2>Adding Foil and Holographic Layers</h2>
+    <p>Open the Foil + Holographic tab to include any combination of a full metallic underprint layer, a holographic overprint pattern, and a custom spot-foil pattern that you can upload with the "Select foil file" button.</p>
+    <p>Select a foil color for the underprint and spot foil layers, as well as a holographic pattern from the dropdowns.</p>
+    <p>The uploaded spot foil design can be transformed in the same ways as the image, or you can click the "Match Image" buttons to have your foil transformations be the same as your image.</p>
   {:else if currentIndex === 3}
-    <h2>Exporting and Purchasing</h2>
-    <p>Once your design is complete, you may either export your custom layout layer as an image, or export all three of the layers as a PDF.</p>
-    <p>If you would like to purchase your design, you may now click the Purchase Print button at the top of the page.</p>
-    <p>It will then generate a custom purchase link for your design and guide you through the purchasing process through our Shopify store.</p>
+    <h2>Purchasing Your Design</h2>
+    <p>Once your design is complete and your uploaded image fully covers the area of the selected product, the "Purchase Print" button will become enabled in the top right corner of the page.</p>
+    <p>Clicking the "Purchase Print" button will prompt you to read and accept our Custom Art Upload Agreement.</p>
+    <p>Once accepted, you will be able to generate a link that adds your custom art design directly to your Shopify cart for purchase!</p>
   {/if}
 </div>
 
@@ -150,6 +150,7 @@
     color: #b9bec5;
     margin-bottom: 8px;
     line-height: 1.5;
+    font-weight: 400;
   }
   
   .gif-carousel {
@@ -252,10 +253,9 @@
     border: 0;
   }
 
-  /* Responsive design */
-  @media (max-width: 640px) {
+  @media (max-width: 800px) {
     .gif-container {
-      width: 300px;
+      width: 400px;
       height: 225px;
     }
 
@@ -264,4 +264,5 @@
       height: 40px;
     }
   }
+  
 </style>

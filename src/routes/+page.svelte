@@ -1,15 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import CanvasTest from './CanvasTest.svelte';
-    import CanvasTestcopy from './CanvasTestcopy.svelte';
-    import TestPage from './TestPage.svelte';
+    import GauntletPage from './GauntletPage.svelte';
 
     let error = $state<Error | null>(null);
     let startLatch = $state(false);
 
     onMount(async () => {
         try {
-        // Your canvas initialization
         } catch (err) {
         error = err as Error;
         console.error('Canvas error:', err);
@@ -29,18 +26,18 @@
 {:else if !startLatch}
   {() => startLatch = true}
 {:else if startLatch}
-   <!-- <CanvasTestcopy /> -->
-  <!-- <CanvasTest /> -->
-  <TestPage />
+  <GauntletPage />
 {/if}
 
 <style lang="postcss">
+  
 	:global(html) {
-		background-color: theme(colors.slate.950);
+		background-color: theme(colors.black);
 	}
 	:global(*) {
-		font-family: 'Poppins', sans-serif;
-		font-weight: 300;
-		font-style: normal;
+		font-family: 'Courier New', Courier, monospace;
+    color: #13c3ff;
+		font-weight: 500;
 	}
+
 </style>

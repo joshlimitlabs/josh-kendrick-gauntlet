@@ -74,7 +74,8 @@
 
     <div class="dropdown-item">
       <div class="toggle-container"
-      style:margin-left=4px>
+      style:margin-left=4px
+      style:margin-right=4px>
         <span>27.5mm Left Thumb</span>
         <label class="toggle-switch">
           <input 
@@ -91,7 +92,8 @@
     <div class="dropdown-item">
       <div class="toggle-container"
       style:margin-top=-8px
-      style:margin-left=4px>
+      style:margin-left=4px
+      style:margin-right=4px>
         <span>27.5mm Right Thumb</span>
         <label class="toggle-switch">
           <input 
@@ -106,15 +108,13 @@
     </div>
 
     <div class="dropdown-item"
-    style="display: flex;
-    justify-content: center;
-    margin-left: -4px;">
+    style="display: flex;">
       <button class="button-item"
         onclick={functionBT}
         style:background-color={ButtonToggle ? 'red' : '#121212'}
         onmouseenter={() => tooltipToggle("buttontoggle")}
         onmouseleave={() => tooltipToggle("")}>
-        Button Toggle
+        Manual Button Toggle
       </button>
     </div>
 
@@ -142,6 +142,7 @@
     min-width: min-content;
     min-height: min-content;
     white-space: nowrap;
+    user-select: none;
   }
 
   .dropdown-container {
@@ -177,10 +178,11 @@
   .dropdown-item {
     margin-bottom: 4px;
     margin-left: 1px;
+    user-select: none;
   }
 
   .button-item {
-    padding: 5px 10px;
+    padding: 8px 12px;
     border: 1px solid #303436;
     min-width: min-content;
     min-height: min-content;
