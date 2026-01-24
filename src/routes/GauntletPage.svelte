@@ -5,16 +5,16 @@
     const GauntletRows: {
         row: number,
         chars: string[] }[] = [
-        { row: 1,  chars: ["rob", "ivy"] },
-        { row: 2,  chars: ["mk", "pit"] },
-        { row: 3,  chars: ["zss", "wario", "marth"] },
-        { row: 4,  chars: ["gnw", "tink", "olimar", "puff"] },
-        { row: 5,  chars: ["charizard", "falco", "fox", "dk", "sonic", "ike"] },
-        { row: 6,  chars: ["falcon", "ness", "mewtwo", "knuckles", "sheik", "ganon"] },
-        { row: 7,  chars: ["roy", "mario", "link", "wolf", "squirtle"] },
-        { row: 8,  chars: ["snake", "lucario", "zelda", "pikachu"] },
-        { row: 9,  chars: ["luigi", "lucas", "bowser", "kirby", "peach"] },
-        { row: 10, chars: ["samus", "yoshi", "ics", "dedede"] }
+        { row: 1,  chars: ["rob"] },
+        { row: 2,  chars: ["ivy", "mk"] },
+        { row: 3,  chars: ["pit", "zss", "gnw"] },
+        { row: 4,  chars: ["wario", "marth", "tink", "puff"] },
+        { row: 5,  chars: ["olimar", "dk", "ike", "fox"] },
+        { row: 6,  chars: ["charizard", "ness", "sonic", "falco", "knuckles"] },
+        { row: 7,  chars: ["mewtwo", "sheik", "falcon", "ganon", "roy", "wolf"] },
+        { row: 8,  chars: ["squirtle", "lucario", "mario", "pikachu", "zelda", "link"] },
+        { row: 9,  chars: ["bowser", "dedede", "lucas", "kirby", "snake", "ics"] },
+        { row: 10, chars: ["luigi", "peach", "yoshi", "samus"] }
     ];
 
 </script>
